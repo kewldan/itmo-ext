@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Зачётка + баллы из таблиц",
+  "version": "0.0.1",
+  "description": "Дополняет зачётку my.itmo.ru баллами из таблиц преподавателей с m3105.ru.",
+  "minimum_chrome_version": "111",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://m3105.ru/*",
+    "https://my.itmo.ru/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  }
+}
