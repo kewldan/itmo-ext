@@ -3,6 +3,7 @@
   window.__m3105GradesInstalled = true;
 
   const MODULE = 'modules/points/points';
+  const ROW_PREFIX = 'm3105-';
   const META = Symbol('m3105');
 
   let grades = null;
@@ -75,11 +76,82 @@
     }
   }
 
+  function labNote(lab) {
+    if (!lab) return '';
+    if (lab.status === 'accepted') {
+      return lab.potential
+        ? ` — принята, после теормина ≈ ${fmt(lab.potential)}`
+        : ' — принята, ждёт теормина';
+    }
+    if (lab.status !== 'done') return '';
+    const notes = [];
+    if (lab.bonus) notes.push(`${lab.bonus > 0 ? '+' : ''}${fmt(lab.bonus)} плюсики`);
+    if (lab.lateLoss) notes.push(`−${fmt(lab.lateLoss)} просрочка`);
+    return notes.length ? ` (${notes.join(', ')})` : '';
+  }
+
+  const NO_TEACHER = { surname: '', name: '', patronymic: '' };
+
+  function buildRows(subj) {
+    const rootId = `${ROW_PREFIX}${subj.sourceId}`;
+    const rows = [
+      {
+        id: rootId,
+        parent_id: null,
+        control_name: `Таблица преподавателя (m3105.ru): ${subj.title}`,
+        required: false,
+        lower_value: 0,
+        max_value: subj.maxTotal || '',
+        rate: Number(subj.total) || 0,
+        date: subj.syncedAt ?? null,
+        teacher: NO_TEACHER,
+      },
+    ];
+    for (const part of subj.parts) {
+      const hasValue = part.value !== null && part.value !== 0;
+      const lab = part.lab;
+      if (!hasValue && lab?.status !== 'accepted' && lab?.status !== 'done') {
+        continue;
+      }
+      rows.push({
+        id: `${rootId}-${part.key}`,
+        parent_id: rootId,
+        control_name: part.label + labNote(lab),
+        required: false,
+        lower_value: 0,
+        max_value: part.max || '',
+        rate: Number(part.value) || 0,
+        date: null,
+        teacher: NO_TEACHER,
+      });
+    }
+    return rows;
+  }
+
+  function applyDetails(st) {
+    const details = st.details;
+    if (!details) return;
+    let changed = false;
+    for (const estId of Object.keys(details)) {
+      const list = details[estId];
+      if (!Array.isArray(list)) continue;
+      const d = (st.disciplines ?? []).find((x) => String(x.est_id) === estId);
+      const subj = d?.[META]?.subj ?? null;
+      const base = list.filter((r) => !String(r?.id).startsWith(ROW_PREFIX));
+      const next = subj ? base.concat(buildRows(subj)) : base;
+      if (JSON.stringify(next) === JSON.stringify(list)) continue;
+      details[estId] = next;
+      changed = true;
+    }
+    if (changed) st.details = { ...details };
+  }
+
   function applyAll() {
     const st = pointsState();
     if (!st) return;
     try {
       applyDisciplines(st, enabled());
+      applyDetails(st);
     } catch (err) {
       console.warn('[m3105] не удалось дополнить зачётку', err);
     }
