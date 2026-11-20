@@ -155,6 +155,91 @@
     } catch (err) {
       console.warn('[m3105] не удалось дополнить зачётку', err);
     }
+    scheduleBadges();
+  }
+
+  const STYLE = `
+    .m3105-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-left: 8px; padding: 1px 8px; border-radius: 999px;
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      vertical-align: middle; white-space: nowrap; text-decoration: none;
+      color: #1946ba; background: #e8efff; border: 1px solid #c9d8ff;
+    }
+    .m3105-badge:hover { background: #dbe6ff; text-decoration: none; }
+    .m3105-badge--replaced { color: #0b6b3a; background: #e3f6ea; border-color: #b9e6c9; }
+  `;
+
+  function injectStyle() {
+    const style = document.createElement('style');
+    style.id = 'm3105-style';
+    style.textContent = STYLE;
+    (document.head ?? document.documentElement).append(style);
+  }
+
+  function badgeFor(subj, m) {
+    const a = document.createElement('a');
+    a.className = 'm3105-badge';
+    a.href = subj.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.dataset.m3105 = String(subj.sourceId);
+    const official = Number(m.orig) || 0;
+    if (m.replaced) a.classList.add('m3105-badge--replaced');
+    if (!m.replaced) a.textContent = `таблица: ${fmt(subj.total)}`;
+    else if (official) a.textContent = `из таблицы · в ИСУ ${fmt(official)}`;
+    else a.textContent = 'из таблицы';
+    const synced = subj.syncedAt
+      ? new Date(subj.syncedAt).toLocaleString('ru-RU')
+      : 'неизвестно';
+    a.title =
+      `${subj.title}: ${fmt(subj.total)} из ${subj.maxTotal}\n` +
+      `В ИСУ: ${official ? fmt(official) : 'пусто'}\n` +
+      `Таблица синхронизирована: ${synced}\n` +
+      'Открыть на m3105.ru';
+    a.addEventListener('click', (e) => e.stopPropagation());
+    return a;
+  }
+
+  function renderBadges() {
+    const st = pointsState();
+    const byName = new Map();
+    for (const d of st?.disciplines ?? []) {
+      const m = d[META];
+      if (m?.subj) byName.set(normalize(d.name), { subj: m.subj, m });
+    }
+    for (const item of document.querySelectorAll('.list-item')) {
+      const title = item.querySelector('.font-weight-bold');
+      if (!title) continue;
+      const existing = title.querySelector('.m3105-badge');
+      const own = existing ? existing.textContent : '';
+      const name = normalize((title.textContent ?? '').replace(own, ''));
+      const hit = byName.get(name);
+      if (!hit) {
+        existing?.remove();
+        continue;
+      }
+      const fresh = badgeFor(hit.subj, hit.m);
+      if (
+        existing &&
+        existing.textContent === fresh.textContent &&
+        existing.title === fresh.title
+      ) {
+        continue;
+      }
+      existing?.remove();
+      title.append(fresh);
+    }
+  }
+
+  let badgesQueued = false;
+  function scheduleBadges() {
+    if (badgesQueued) return;
+    badgesQueued = true;
+    requestAnimationFrame(() => {
+      badgesQueued = false;
+      renderBadges();
+    });
   }
 
   function identity() {
@@ -170,6 +255,10 @@
     store.subscribe((mutation) => {
       if (!mutation.type.startsWith(`${MODULE}/`)) return;
       applyAll();
+    });
+    new MutationObserver(scheduleBadges).observe(document.body, {
+      childList: true,
+      subtree: true,
     });
   }
 
@@ -191,7 +280,7 @@
     const timer = setInterval(() => {
       tries += 1;
       store ??= window.$nuxt?.$store ?? null;
-      if (store && !hooked) {
+      if (store && !hooked && document.body) {
         hooked = true;
         hookStore();
       }
@@ -208,5 +297,6 @@
     }, 250);
   }
 
+  injectStyle();
   waitForApp();
 })();
