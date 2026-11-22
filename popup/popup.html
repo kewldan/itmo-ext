@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Баллы из таблиц</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Баллы из таблиц</h1>
+      <label class="switch" title="Дополнять зачётку">
+        <input id="enabled" type="checkbox" />
+        <span></span>
+      </label>
+    </header>
+
+    <p id="who" class="muted">Загружаю…</p>
+
+    <ul id="subjects"></ul>
+    <p id="error" class="error" hidden></p>
+
+    <fieldset>
+      <legend>Какие баллы показывать в зачётке</legend>
+      <label class="radio">
+        <input type="radio" name="mode" value="max" />
+        Большее из ИСУ и таблицы
+      </label>
+      <label class="radio">
+        <input type="radio" name="mode" value="table" />
+        Всегда из таблицы
+      </label>
+    </fieldset>
+
+    <details id="manual">
+      <summary>Не нашлось в таблицах?</summary>
+      <p class="muted">
+        Имя берётся из my.itmo.ru. Если в таблице оно записано иначе или
+        есть тёзки — укажите вручную.
+      </p>
+      <label class="field">
+        Фамилия Имя
+        <input id="nameOverride" type="text" placeholder="Иванов Иван" />
+      </label>
+      <label class="field">
+        Группа
+        <input id="groupOverride" type="text" placeholder="М3105" />
+      </label>
+    </details>
+
+    <footer>
+      <span id="updated" class="muted"></span>
+      <button id="refresh" type="button">Обновить</button>
+    </footer>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

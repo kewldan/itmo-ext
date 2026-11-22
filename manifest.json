@@ -1,39 +1,30 @@
 {
   "manifest_version": 3,
   "name": "Зачётка + баллы из таблиц",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Дополняет зачётку my.itmo.ru баллами из таблиц преподавателей с m3105.ru.",
   "minimum_chrome_version": "111",
-  "permissions": [
-    "storage"
-  ],
-  "host_permissions": [
-    "https://m3105.ru/*",
-    "https://my.itmo.ru/*"
-  ],
+  "permissions": ["storage"],
+  "host_permissions": ["https://m3105.ru/*", "https://my.itmo.ru/*"],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://my.itmo.ru/*"
-      ],
-      "js": [
-        "src/bridge.js"
-      ],
+      "matches": ["https://my.itmo.ru/*"],
+      "js": ["src/bridge.js"],
       "run_at": "document_start"
     },
     {
-      "matches": [
-        "https://my.itmo.ru/*"
-      ],
-      "js": [
-        "src/page.js"
-      ],
+      "matches": ["https://my.itmo.ru/*"],
+      "js": ["src/page.js"],
       "run_at": "document_start",
       "world": "MAIN"
     }
-  ]
+  ],
+  "action": {
+    "default_title": "Баллы из таблиц",
+    "default_popup": "popup/popup.html"
+  }
 }
