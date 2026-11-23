@@ -47,6 +47,12 @@
     );
   }
 
+  function isActualSemester(st) {
+    const plan = st.plans?.find((p) => p.main_plan === st.currentPlan);
+    const sem = plan?.semesters?.find((s) => s.semester === st.currentSemester);
+    return sem ? sem.actual !== false : true;
+  }
+
   function meta(obj, original) {
     if (!obj[META]) {
       Object.defineProperty(obj, META, {
@@ -73,6 +79,17 @@
       const next = mergedScore(m.orig, m.subj);
       m.replaced = m.subj !== null && next !== m.orig;
       if (d.current_score[0] !== next) d.current_score.splice(0, 1, next);
+    }
+  }
+
+  function applyWidget(st) {
+    for (const d of st.widgetDisciplines ?? []) {
+      if (Array.isArray(d.current_score)) continue;
+      const m = meta(d, d.current_score ?? null);
+      m.subj = subjectFor(d.name);
+      const next = mergedScore(m.orig, m.subj);
+      m.replaced = m.subj !== null && next !== m.orig;
+      if (d.current_score !== next) d.current_score = next;
     }
   }
 
@@ -150,8 +167,9 @@
     const st = pointsState();
     if (!st) return;
     try {
-      applyDisciplines(st, enabled());
+      applyDisciplines(st, enabled() && isActualSemester(st));
       applyDetails(st);
+      applyWidget(st);
     } catch (err) {
       console.warn('[m3105] не удалось дополнить зачётку', err);
     }
@@ -204,7 +222,7 @@
   function renderBadges() {
     const st = pointsState();
     const byName = new Map();
-    for (const d of st?.disciplines ?? []) {
+    for (const d of [...(st?.disciplines ?? []), ...(st?.widgetDisciplines ?? [])]) {
       const m = d[META];
       if (m?.subj) byName.set(normalize(d.name), { subj: m.subj, m });
     }
