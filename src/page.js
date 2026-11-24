@@ -145,6 +145,50 @@
     return rows;
   }
 
+  // копия ListItem.details с my.itmo.ru: после вложенной строки она пропускает следующую
+  function itmoTree(list) {
+    const data = list.map((x) => ({ ...x }));
+    const roots = [];
+    const attach = (el, nodes, at) => {
+      for (const node of nodes) {
+        if (el.parent_id === node.id) {
+          node.children.push(el);
+          data.splice(at, 1);
+          break;
+        }
+        attach(el, node.children, at);
+      }
+    };
+    for (let pass = 0; data.length > 0 && pass < 10; pass += 1) {
+      for (let i = 0; i < data.length; i += 1) {
+        const el = data[i];
+        el.children = [];
+        if (el.parent_id !== null) {
+          attach(el, roots, i);
+        } else {
+          roots.push(el);
+          data.splice(i, 1);
+          i -= 1;
+        }
+      }
+    }
+    return roots;
+  }
+
+  function arrangeForTree(base, rows) {
+    const [root, ...children] = rows;
+    if (children.length < 2) return rows;
+    const probe = children.map((c, slot) => ({ ...c, slot }));
+    const tree = itmoTree([...base, root, ...probe]);
+    const slots = tree.find((n) => n.id === root.id)?.children.map((n) => n.slot);
+    if (!slots || slots.length !== children.length) return rows;
+    const arranged = new Array(children.length);
+    slots.forEach((slot, j) => {
+      arranged[slot] = children[j];
+    });
+    return [root, ...arranged];
+  }
+
   function applyDetails(st) {
     const details = st.details;
     if (!details) return;
@@ -155,7 +199,9 @@
       const d = (st.disciplines ?? []).find((x) => String(x.est_id) === estId);
       const subj = d?.[META]?.subj ?? null;
       const base = list.filter((r) => !String(r?.id).startsWith(ROW_PREFIX));
-      const next = subj ? base.concat(buildRows(subj)) : base;
+      const next = subj
+        ? base.concat(arrangeForTree(base, buildRows(subj)))
+        : base;
       if (JSON.stringify(next) === JSON.stringify(list)) continue;
       details[estId] = next;
       changed = true;
