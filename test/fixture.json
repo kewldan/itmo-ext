@@ -1,0 +1,344 @@
+{
+  "ok": true,
+  "settings": {
+    "enabled": true,
+    "mode": "max",
+    "nameOverride": "",
+    "groupOverride": ""
+  },
+  "wantedName": "Иванов Иван",
+  "subjects": [
+    {
+      "sourceId": 1,
+      "title": "Лабы по программированию",
+      "subjectName": "Основы программирования",
+      "maxTotal": 100,
+      "syncedAt": "2026-11-25T22:16:44.726342+03:00",
+      "changedAt": "2026-11-12T00:40:05.482714+03:00",
+      "url": "https://m3105.ru/grades?source=1",
+      "total": 26.4,
+      "group": "М3100",
+      "name": "Иванов Иван",
+      "parts": [
+        {
+          "key": "lab1",
+          "label": "Лаба 1",
+          "max": 12,
+          "value": 12.96,
+          "lab": {
+            "status": "done",
+            "theory": 12,
+            "plus": 2,
+            "stage": 0,
+            "factor": 1,
+            "points": 12.96,
+            "bonus": 0.96
+          }
+        },
+        {
+          "key": "lab2",
+          "label": "Лаба 2",
+          "max": 12,
+          "value": 13.44,
+          "lab": {
+            "status": "done",
+            "theory": 12,
+            "plus": 3,
+            "stage": 0,
+            "factor": 1,
+            "points": 13.44,
+            "bonus": 1.44
+          }
+        },
+        {
+          "key": "lab3",
+          "label": "Лаба 3",
+          "max": 12,
+          "value": 0,
+          "lab": {
+            "status": "accepted",
+            "plus": 6,
+            "stage": 0,
+            "factor": 1,
+            "potential": 14.88
+          }
+        },
+        {
+          "key": "lab4",
+          "label": "Лаба 4",
+          "max": 12,
+          "value": 0,
+          "lab": {
+            "status": "none"
+          }
+        },
+        {
+          "key": "lab5",
+          "label": "Лаба 5",
+          "max": 12,
+          "value": 0,
+          "lab": {
+            "status": "none"
+          }
+        },
+        {
+          "key": "live",
+          "label": "Лайвкодинг",
+          "max": 10,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "exam",
+          "label": "Экзамен",
+          "max": 30,
+          "value": null,
+          "lab": null
+        }
+      ]
+    },
+    {
+      "sourceId": 2,
+      "title": "Рейтинг АиСД",
+      "subjectName": "Алгоритмы и структуры данных",
+      "maxTotal": 100,
+      "syncedAt": "2026-11-25T21:32:42.669124+03:00",
+      "changedAt": "2026-11-14T23:40:01.896045+03:00",
+      "url": "https://m3105.ru/grades?source=2",
+      "total": 41.83,
+      "group": "М3100",
+      "name": "Иванов Иван",
+      "parts": [
+        {
+          "key": "lab0",
+          "label": "ЛР 0",
+          "max": 0,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "lab1",
+          "label": "ЛР 1",
+          "max": 6,
+          "value": 6,
+          "lab": null
+        },
+        {
+          "key": "lab2",
+          "label": "ЛР 2",
+          "max": 5,
+          "value": 5,
+          "lab": null
+        },
+        {
+          "key": "lab3",
+          "label": "ЛР 3",
+          "max": 5,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "lab4",
+          "label": "ЛР 4",
+          "max": 7,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "lab5",
+          "label": "ЛР 5",
+          "max": 0,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "lab6",
+          "label": "ЛР 6",
+          "max": 0,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "lab7",
+          "label": "ЛР 7",
+          "max": 0,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "t1",
+          "label": "Тест 1",
+          "max": 5,
+          "value": 5,
+          "lab": null
+        },
+        {
+          "key": "t2",
+          "label": "Тест 2",
+          "max": 5,
+          "value": 5,
+          "lab": null
+        },
+        {
+          "key": "t3",
+          "label": "Тест 3",
+          "max": 5,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "t4",
+          "label": "Тест 4",
+          "max": 5,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "t5",
+          "label": "Тест 5",
+          "max": 5,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "t6",
+          "label": "Тест 6",
+          "max": 5,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "colloq1",
+          "label": "Командный коллоквиум",
+          "max": 10,
+          "value": 10,
+          "lab": null
+        },
+        {
+          "key": "live1",
+          "label": "Лайвкодинг",
+          "max": 8,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "colloq2",
+          "label": "Теормин",
+          "max": 10,
+          "value": null,
+          "lab": null
+        }
+      ]
+    },
+    {
+      "sourceId": 3,
+      "title": "Дискретная математика",
+      "subjectName": "Дискретная математика",
+      "maxTotal": 100,
+      "syncedAt": "2026-11-25T21:40:42.564504+03:00",
+      "changedAt": "2026-11-19T12:10:07.3443+03:00",
+      "url": "https://m3105.ru/grades?source=3",
+      "total": 23.9,
+      "group": "М3100",
+      "name": "Иванов Иван",
+      "parts": [
+        {
+          "key": "hw1",
+          "label": "ДЗ 1",
+          "max": 10,
+          "value": 9,
+          "lab": null
+        },
+        {
+          "key": "hw2",
+          "label": "ДЗ 2",
+          "max": 10,
+          "value": 0,
+          "lab": null
+        },
+        {
+          "key": "hw3",
+          "label": "ДЗ 3",
+          "max": 10,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "hw4",
+          "label": "ДЗ 4",
+          "max": 10,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "test1",
+          "label": "Тест 1",
+          "max": 10,
+          "value": 8.4,
+          "lab": null
+        },
+        {
+          "key": "test2",
+          "label": "Тест 2",
+          "max": 10,
+          "value": 0,
+          "lab": null
+        },
+        {
+          "key": "test3",
+          "label": "Тест 3",
+          "max": 10,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "test4",
+          "label": "Тест 4",
+          "max": 10,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "pr",
+          "label": "Практика",
+          "max": 10,
+          "value": 0,
+          "lab": null
+        },
+        {
+          "key": "lec",
+          "label": "Лекции",
+          "max": 10,
+          "value": 7.5,
+          "lab": null
+        },
+        {
+          "key": "min1",
+          "label": "Теормин 1",
+          "max": 10,
+          "value": 8,
+          "lab": null
+        },
+        {
+          "key": "min2",
+          "label": "Теормин 2",
+          "max": 10,
+          "value": null,
+          "lab": null
+        },
+        {
+          "key": "exam",
+          "label": "Экзамен",
+          "max": 20,
+          "value": null,
+          "lab": null
+        }
+      ]
+    }
+  ],
+  "ambiguous": [],
+  "sourcesCount": 3,
+  "fetchedAt": 1795634753639,
+  "stale": false,
+  "error": null
+}

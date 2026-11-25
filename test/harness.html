@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><title>m3105 harness</title>
+<style>body{font:14px system-ui;padding:16px}.list-item{padding:8px 0;border-bottom:1px solid #ddd}</style>
+</head>
+<body>
+<h3>Макет зачётки (стор без реактивности, проверка данных)</h3>
+<div id="list"></div>
+<pre id="out"></pre>
+<script>
+const MODULE = 'modules/points/points';
+const raw = [
+  { name: 'Алгоритмы и структуры данных', discipline_id: 1, est_id: 101, current_score: null, rate: null, control_type: 'Экзамен' },
+  { name: 'Дискретная математика', discipline_id: 2, est_id: 102, current_score: 30, rate: null, control_type: 'Экзамен' },
+  { name: 'Основы программирования', discipline_id: 3, est_id: 103, current_score: 13, rate: null, control_type: 'Экзамен' },
+  { name: 'Линейная алгебра', discipline_id: 4, est_id: 104, current_score: 13, rate: null, control_type: 'Экзамен' },
+];
+const state = { [MODULE]: { plans: [{ main_plan: 1, semesters: [{ semester: 1, actual: true }, { semester: 2, actual: false }] }],
+  currentPlan: 1, currentSemester: 1, disciplines: [], details: {}, widgetDisciplines: [] } };
+const mutations = {
+  SET_DISCIPLINES(s, list) { s.disciplines = list.map((o) => ({ name: o.name, est_id: o.est_id, current_score: [o.current_score], rate: [o.rate], control_type: [o.control_type] })); },
+  SET_DETAILS(s, { estId, result }) { s.details[estId] = result; },
+};
+const subs = [];
+const $store = { state, subscribe: (f) => subs.push(f),
+  commit(type, payload) { mutations[type](state[MODULE], payload); subs.forEach((f) => f({ type: `${MODULE}/${type}`, payload }, state)); render(); } };
+function render() {
+  const list = document.getElementById('list');
+  list.replaceChildren(...state[MODULE].disciplines.map((d) => {
+    const el = document.createElement('div'); el.className = 'list-item';
+    el.innerHTML = `<div class="py-2"><div class="font-weight-bold"></div></div><span class="score"></span>`;
+    el.querySelector('.font-weight-bold').textContent = d.name;
+    el.querySelector('.score').textContent = 'баллы: ' + (d.current_score[0] ?? '—');
+    return el;
+  }));
+}
+window.$nuxt = { $store, $auth: { user: { family_name: 'Иванов', given_name: 'Иван' } } };
+document.addEventListener('m3105:hello', async (e) => {
+  window.__hello = JSON.parse(e.detail);
+  const grades = await (await fetch('fixture.json')).json();
+  document.dispatchEvent(new CustomEvent('m3105:grades', { detail: JSON.stringify(grades) }));
+});
+$store.commit('SET_DISCIPLINES', raw);
+$store.commit('SET_DETAILS', { estId: '103', result: [{ id: 1, parent_id: null, control_name: 'Официальная строка', rate: 13, teacher: {} }] });
+</script>
+<script src="../src/page.js"></script>
+</body>
+</html>
