@@ -13,6 +13,7 @@ src/shared.js         DEFAULT_SETTINGS, normalizeName — общее для фо
 src/bridge.js         content script, изолированный мир: CustomEvent ↔ runtime.sendMessage
 src/page.js           content script, world: MAIN: правка Vuex-стора зачётки и плашки
 popup/                настройки (chrome.storage.sync → settings)
+icons/                иконки 16/32/48/128: кольцо баллов с плюсом на синем градиенте
 test/harness.html     макет стора с модулем зачётки; test/fixture.json — обезличенный ответ getGrades
 ```
 
