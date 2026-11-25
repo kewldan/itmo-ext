@@ -14,6 +14,8 @@ src/bridge.js         content script, изолированный мир: CustomE
 src/page.js           content script, world: MAIN: правка Vuex-стора зачётки и плашки
 popup/                настройки (chrome.storage.sync → settings)
 icons/                иконки 16/32/48/128: кольцо баллов с плюсом на синем градиенте
+scripts/build.mjs     проверка (--check) и сборка dist/itmo-ext-<version>.zip, без зависимостей
+.github/workflows/    build.yml: сборка и артефакт на push/PR, релиз с zip на тег v*
 test/harness.html     макет стора с модулем зачётки; test/fixture.json — обезличенный ответ getGrades
 ```
 
@@ -53,7 +55,11 @@ test/harness.html     макет стора с модулем зачётки; te
 
 ## Проверка
 
-- Синтаксис: `for f in src/*.js popup/*.js; do node --check "$f"; done`.
+- `node scripts/build.mjs --check`: манифест, существование файлов из манифеста и попапа, размеры
+  PNG-иконок, `node --check` всех скриптов; в CI ещё и совпадение тега `vX.Y.Z` с `version`.
+  Новый файл, на который ссылается манифест, должен лежать в `src/`, `popup/` или `icons/` —
+  только они попадают в zip.
+- Релиз: поднять `version` в `manifest.json`, закоммитить, `git tag vX.Y.Z && git push origin vX.Y.Z`.
 - `page.js` без входа в ИСУ: `python3 -m http.server 8765` и
   `http://localhost:8765/test/harness.html`. Макет не реактивный: после событий вызывай
   `render()` и смотри `$nuxt.$store.state['modules/points/points']`.

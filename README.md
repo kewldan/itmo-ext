@@ -7,9 +7,9 @@
 **Расширение для Chrome, которое дописывает в «Зачётку» на [my.itmo.ru](https://my.itmo.ru/points)
 реальные баллы из таблиц преподавателей**
 
+[![build](https://img.shields.io/github/actions/workflow/status/kewldan/itmo-ext/build.yml?branch=main&style=flat-square&label=build)](https://github.com/kewldan/itmo-ext/actions/workflows/build.yml)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-1946ba?style=flat-square)
 ![Chrome 111+](https://img.shields.io/badge/Chrome-111%2B-4285F4?style=flat-square&logo=googlechrome&logoColor=white)
-![No build](https://img.shields.io/badge/сборка-не_нужна-0b6b3a?style=flat-square)
 ![License MIT](https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square)
 
 </div>
@@ -45,9 +45,10 @@
 
 ## 🚀 Установка
 
-1. Скачайте репозиторий: `git clone https://github.com/kewldan/itmo-ext` или **Code → Download ZIP**.
+1. Скачайте `itmo-ext-*.zip` из [последнего релиза](https://github.com/kewldan/itmo-ext/releases/latest) и распакуйте
+   (или `git clone https://github.com/kewldan/itmo-ext`).
 2. Откройте `chrome://extensions` и включите **«Режим разработчика»**.
-3. Нажмите **«Загрузить распакованное расширение»** и выберите папку проекта.
+3. Нажмите **«Загрузить распакованное расширение»** и выберите распакованную папку.
 4. Откройте [my.itmo.ru/points](https://my.itmo.ru/points).
 
 Работает в Chrome, Edge, Яндекс Браузере, Arc и других браузерах на Chromium.
@@ -100,7 +101,22 @@ flowchart LR
 
 ## 🧑‍💻 Разработка
 
-Сборки нет: правите файлы и нажимаете ↻ у расширения в `chrome://extensions`.
+Зависимостей и сборщика нет: правите файлы и нажимаете ↻ у расширения в `chrome://extensions`.
+
+```bash
+node scripts/build.mjs --check   # манифест, ссылки на файлы, размеры иконок, синтаксис
+node scripts/build.mjs           # то же + dist/itmo-ext-<версия>.zip
+```
+
+CI ([`build.yml`](.github/workflows/build.yml)) собирает zip на каждый push и PR и кладёт его
+в артефакты. Релиз — тег с версией из `manifest.json`:
+
+```bash
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+Если тег не совпадает с `version` в манифесте, сборка упадёт.
+
 
 Проверить `page.js` без входа в ИСУ можно на макете:
 
